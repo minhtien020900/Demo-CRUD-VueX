@@ -5,8 +5,12 @@
       id="category-modal"
       hide-footer
       header-bg-variant="light"
+      @hidden="toggleModal()"
     >
-      <template #modal-title>Add new category</template>
+      <template #modal-title>
+        <slot name="modal-title"></slot>
+      </template>
+
       <b-form>
         <b-form-group
           label="Category name:"
@@ -15,13 +19,13 @@
         >
           <b-form-input
             id="input-name-category"
-            v-model="catName"
+            v-model="editedItem.category_name"
           ></b-form-input>
         </b-form-group>
         <b-form-group label="Category image:" label-for="btn-select-file">
           <b-form-file
             id="btn-select-file"
-            v-model="catFile"
+            v-model="editedItem.catFile"
             class="mt-3"
             plain
           ></b-form-file>
@@ -34,64 +38,69 @@
         </div>
       </b-form>
     </b-modal>
-
-    
+    {{ editedItem }}
   </div>
 </template>
 
 <script>
-import { eventBus } from "../main";
-export default {
-  props: {
-    maxId: {},
-  },
-  data() {
-    return {
-      isShow: false,
-      catName: "",
-      catFile: [],
-      catItemDefault: {
-        id: 0,
-        category_name: "",
-        catImage: "",
+  import { eventBus } from "@/main";
+  export default {
+    name: "category-modal",
+    props: {
+      maxId: {},
+      editedItem: {},
+    },
+    data() {
+      return {
+        isShow: false,
+        catName: "",
+        catFile: [],
+        catItemDefault: {
+          id: 0,
+          category_name: "",
+          catImage: "",
+        },
+      };
+    },
+    methods: {
+      submitForm() {
+        alert(1);
       },
-    };
-  },
-  methods: {
-    submitForm() {
-      alert(1);
-    },
-    addCategory() {
-      
-      let emptyObj = Object.assign({}, this.catItemDefault);
-      if (this.catName != "" && this.catFile.length != 0) {
-        this.catItemDefault.category_name = this.catName;
-        this.catItemDefault.catImage = this.catFile.name;
-        this.catItemDefault.id = this.maxId + 1;
-        this.$emit("addCategory", this.catItemDefault);
+      addCategory() {
+        let emptyObj = Object.assign({}, this.catItemDefault);
+        if (this.catName != "" && this.catFile.length != 0) {
+          this.catItemDefault.category_name = this.catName;
+          this.catItemDefault.catImage = this.catFile.name;
+          this.catItemDefault.id = this.maxId + 1;
+          this.$emit("addCategory", this.catItemDefault);
 
-        // Gán lại giá trị rỗng cho modal
-        this.catName = "";
-        this.catFile = [];
+          // Gán lại giá trị rỗng cho modal
+          this.catName = "";
+          this.catFile = [];
 
-        this.catItemDefault = Object.assign({}, emptyObj);
+          this.catItemDefault = Object.assign({}, emptyObj);
+        }
+
+        this.$bvModal.hide("category-modal");
+      },
+      toggleModal(){
+        this.editedItem={};
       }
-
-      this.$bvModal.hide("category-modal");
-      
     },
-  },
-  created() {
-    eventBus.$once("showCategoryModal", () => {
-      this.$bvModal.show("category-modal");
-    });
-  },
-};
+    created() {
+      eventBus.$once("showCategoryModal", () => {
+        this.$bvModal.show("category-modal");
+      });
+    },
+    mounted(){
+    this.toggleModal();
+    }
+  };
 </script>
 
 <style>
-#btn-form {
-  display: flex;
-  justify-content: center;
-}
+  #btn-form {
+    display: flex;
+    justify-content: center;
+  }
 </style>

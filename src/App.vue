@@ -2,17 +2,16 @@
   <div id="app">
 
     <div class="container">
-      <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+      
       <Navbar></Navbar>
     </div>
   </div>
 </template>
 
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
+
 import Navbar from "./components/Navbar.vue";
-// import SearchBar from "./components/SearchBar.vue";
-// import TableData from "./components/GridViewData";
+
 export default {
   name: "App",
   components: {
