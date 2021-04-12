@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div id="confirm-modal"></div>
 </template>
 
@@ -47,4 +47,4 @@
   };
 </script>
 
-<style></style>
+<style></style> -->

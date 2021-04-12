@@ -1,36 +1,33 @@
 <template>
   <div id="app">
-    <link
-      rel="stylesheet"
-      href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons"
-    />
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+
+    <div class="container">
+      <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+      <Navbar></Navbar>
     </div>
-    <router-view />
   </div>
 </template>
 
+<script>
+// import HelloWorld from './components/HelloWorld.vue'
+import Navbar from "./components/Navbar.vue";
+// import SearchBar from "./components/SearchBar.vue";
+// import TableData from "./components/GridViewData";
+export default {
+  name: "App",
+  components: {
+    Navbar,
+  },
+};
+</script>
+
 <style>
-  #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
-  #nav {
-    padding: 30px;
-  }
-
-  #nav a {
-    font-weight: bold;
-    color: #2c3e50;
-  }
-
-  #nav a.router-link-exact-active {
-    color: #42b983;
-  }
+  color: #2c3e50;
+  margin-top: 60px;
+}
 </style>

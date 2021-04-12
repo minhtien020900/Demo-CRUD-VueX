@@ -31,9 +31,9 @@
     //     },
     //   },
     methods: {
-    //   showModal() {
-    //     this.$emit("showModal");
-    //   },
+      showModal() {
+        this.$emit("showModal");
+      },
     },
   };
 </script>

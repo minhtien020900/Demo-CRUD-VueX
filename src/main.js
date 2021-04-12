@@ -20,6 +20,8 @@ import 'vue-material/dist/theme/default.css'
 Vue.use(VueMaterial)
 Vue.config.productionTip = false;
 
+export const eventBus = new Vue();
+
 new Vue({
     router,
     store,
