@@ -45,46 +45,46 @@
 </template>
 
 <script>
-export default {
-  name: "category-modal",
-  props: ["editedItem"],
+  export default {
+    name: "category-modal",
+    props: ["editedItem"],
 
-  data() {
-    return {
-      catItem: {},
-      catFile: [],
-    };
-  },
-  watch: {
-    editedItem: function () {
-      return (this.catItem = Object.assign({}, this.editedItem));
+    data() {
+      return {
+        catItem: {},
+        catFile: [],
+      };
     },
-  },
-  methods: {
-    submitForm() {
-      alert(1);
+    watch: {
+      editedItem: function () {
+        return (this.catItem = Object.assign({}, this.editedItem));
+      },
     },
-    save() {
-      if (this.catItem.name.length > 0 && this.catFile != undefined) {
-        let formData = new FormData();
-        formData.append("name", this.catItem.name);
-        formData.append("image", this.catFile);
-        this.$emit("save", formData);
-      }
+    methods: {
+      submitForm() {
+        alert(1);
+      },
+      save() {
+        if (this.catItem.name.length > 0 && this.catFile != undefined) {
+          let formData = new FormData();
+          formData.append("name", this.catItem.name);
+          formData.append("image", this.catFile);
+          this.$emit("save", formData);
+        }
+      },
+      toggleModal() {
+        this.catItem = {};
+      },
     },
-    toggleModal() {
-      this.catItem = {};
+    mounted() {
+      this.toggleModal();
     },
-  },
-  mounted() {
-    this.toggleModal();
-  },
-};
+  };
 </script>
 
 <style>
-#btn-form {
-  display: flex;
-  justify-content: center;
-}
+  #btn-form {
+    display: flex;
+    justify-content: center;
+  }
 </style>
