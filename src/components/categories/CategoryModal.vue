@@ -19,88 +19,68 @@
         >
           <b-form-input
             id="input-name-category"
-            v-model="editedItem.category_name"
+            v-model="catItem.category_name"
           ></b-form-input>
         </b-form-group>
         <b-form-group label="Category image:" label-for="btn-select-file">
           <b-form-file
             id="btn-select-file"
-            v-model="editedItem.catFile"
+            v-model="catItem.catFile"
             class="mt-3"
             plain
           ></b-form-file>
         </b-form-group>
         <div id="btn-form">
-          <b-button variant="primary" class="mr-2" @click="addCategory()"
+          <b-button variant="primary" class="mr-2" @click="save()"
             >Submit</b-button
           >
           <b-button class="ml-2" type="reset" variant="danger">Reset</b-button>
         </div>
       </b-form>
     </b-modal>
-    {{ editedItem }}
   </div>
 </template>
 
 <script>
-  import { eventBus } from "@/main";
-  export default {
-    name: "category-modal",
-    props: {
-      maxId: {},
-      editedItem: {},
+export default {
+  name: "category-modal",
+  props: ["editedItem"],
+
+  data() {
+    return {
+      catItem: { id: 0, category_name: "", catFile: [] },
+    };
+  },
+  watch: {
+    editedItem: function () {
+      return (this.catItem = Object.assign({}, this.editedItem));
     },
-    data() {
-      return {
-        isShow: false,
-        catName: "",
-        catFile: [],
-        catItemDefault: {
-          id: 0,
-          category_name: "",
-          catImage: "",
-        },
-      };
+  },
+  methods: {
+    submitForm() {
+      alert(1);
     },
-    methods: {
-      submitForm() {
-        alert(1);
-      },
-      addCategory() {
-        let emptyObj = Object.assign({}, this.catItemDefault);
-        if (this.catName != "" && this.catFile.length != 0) {
-          this.catItemDefault.category_name = this.catName;
-          this.catItemDefault.catImage = this.catFile.name;
-          this.catItemDefault.id = this.maxId + 1;
-          this.$emit("addCategory", this.catItemDefault);
-
-          // Gán lại giá trị rỗng cho modal
-          this.catName = "";
-          this.catFile = [];
-
-          this.catItemDefault = Object.assign({}, emptyObj);
-        }
-
-        this.$bvModal.hide("category-modal");
-      },
-      toggleModal(){
-        this.editedItem={};
+    save() {
+      if (
+        this.catItem.category_name.length > 0 &&
+        this.catItem.catFile.name != undefined
+      ) {
+        this.$emit("save", this.catItem);
       }
     },
-    created() {
-      eventBus.$once("showCategoryModal", () => {
-        this.$bvModal.show("category-modal");
-      });
+    toggleModal() {
+      this.catItem = { id: 0, category_name: "", catFile: [] };
     },
-    mounted(){
+  },
+  mounted() {
     this.toggleModal();
-    }
-  };
+  },
+};
 </script>
 
 <style>
-  #btn-form {
-    display: flex;
-    justify-content: center;
-  }
+#btn-form {
+  display: flex;
+  justify-content: center;
+}
 </style>
