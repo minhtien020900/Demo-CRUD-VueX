@@ -28,7 +28,10 @@
       >
         <br />
         <template #cell(catFile)="data">
-          {{ data.item.catFile.name }}
+          <img
+            class="img-fluid"
+            :src="`http://localhost:8000/${data.item.image}`"
+          />
         </template>
         <template #cell(operations)="row">
           <md-button
@@ -75,6 +78,7 @@
       :totalRows="totalRows"
       @updateCurentPage="updateCurentPage($event)"
     />
+    {{ catList }}
   </div>
 </template>
 
@@ -103,58 +107,55 @@ export default {
       isShowModal: false,
       editedIndex: -1,
       catFile: "",
-      catItemDefault: {
-        id: 0,
-        category_name: "",
-        catFile: [],
-      },
-      editedItem: {
-        id: 0,
-        category_name: "",
-        catFile: [],
-      },
-      catList: [
-        {
-          id: 1,
-          category_name: "Điện thoại",
-          catFile: [],
-        },
-        {
-          id: 2,
+      // catItemDefault: {
+      //   id: 0,
+      //   category_name: "",
+      //   catFile: [],
+      // },
+      editedItem: {},
 
-          category_name: "Laptop",
-          catFile: [],
-        },
+      // catList: [
+      //   {
+      //     id: 1,
+      //     category_name: "Điện thoại",
+      //     catFile: [],
+      //   },
+      //   {
+      //     id: 2,
 
-        {
-          id: 3,
-          category_name: "Máy tính bảng",
-          catFile: [],
-        },
-        {
-          id: 4,
-          category_name: "Máy tính bảng",
-          catFile: [],
-        },
-        {
-          id: 5,
-          category_name: "Máy tính bảng",
-          catFile: [],
-        },
-        {
-          id: 6,
-          category_name: "Máy tính bảng",
-          catFile: [],
-        },
-        {
-          id: 7,
-          category_name: "Máy tính bảng",
-          catFile: [],
-        },
-      ],
+      //     category_name: "Laptop",
+      //     catFile: [],
+      //   },
+
+      //   {
+      //     id: 3,
+      //     category_name: "Máy tính bảng",
+      //     catFile: [],
+      //   },
+      //   {
+      //     id: 4,
+      //     category_name: "Máy tính bảng",
+      //     catFile: [],
+      //   },
+      //   {
+      //     id: 5,
+      //     category_name: "Máy tính bảng",
+      //     catFile: [],
+      //   },
+      //   {
+      //     id: 6,
+      //     category_name: "Máy tính bảng",
+      //     catFile: [],
+      //   },
+      //   {
+      //     id: 7,
+      //     category_name: "Máy tính bảng",
+      //     catFile: [],
+      //   },
+      // ],
       catFields: [
         { key: "id", label: "#", sortable: true },
-        { key: "category_name", label: "Category name", sortable: true },
+        { key: "name", label: "Category name", sortable: true },
 
         { key: "catFile", label: "Image", sortable: true },
         { key: "operations", sortable: false },
@@ -177,9 +178,12 @@ export default {
     };
   },
   created() {
+    this.$store.dispatch("fetchCatList");
+
     this.renderCatList();
     this.totalRow = this.catList.length;
   },
+  mounted() {},
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "Add new category" : "Edit category";
@@ -195,6 +199,9 @@ export default {
     },
     totalResult() {
       return this.keyword.length > 0 ? this.catListSearch.length : 0;
+    },
+    catList() {
+      return this.$store.getters.getCatList;
     },
   },
   watch: {
@@ -214,8 +221,7 @@ export default {
   methods: {
     showConfirmDialog(item) {
       eventBus.$emit("showConfirmDialog");
-      this.editedIndex = this.catList.indexOf(item);
-      this.editedItem = Object.assign({}, item);
+      this.editedIndex = item.id;
     },
     showCatModal() {
       this.$bvModal.show("category-modal");
@@ -223,18 +229,18 @@ export default {
     closeCatModal() {
       this.$bvModal.hide("category-modal");
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.catItemDefault);
+        this.editedItem = {};
         this.editedIndex = -1;
       });
     },
     closeDelete() {
       this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.catItemDefault);
+        this.editedItem = {};
         this.editedIndex = -1;
       });
     },
     editItem(item) {
-      this.editedIndex = this.catList.indexOf(item);
+      this.editedIndex = item.id;
       this.editedItem = Object.assign({}, item);
       this.showCatModal();
     },
@@ -246,17 +252,17 @@ export default {
     },
     save(data) {
       if (this.editedIndex > -1) {
-        Object.assign(this.catList[this.editedIndex], data);
+        let payload = { id: this.editedIndex, data: data };
+        this.$store.dispatch("editCat", payload);
       } else {
-        data.id = this.catList.length + 1;
-        this.catList.push(data);
+        this.$store.dispatch("addCat", data);
       }
       this.closeCatModal();
     },
     renderCatList() {
       let baseList = [];
       this.catListSearch = this.catList.filter((catItem) => {
-        return catItem.category_name.search(this.keyword) != -1;
+        return catItem.name.search(this.keyword) != -1;
       });
       if (this.isSearch === false) {
         baseList = this.catList;
@@ -294,5 +300,9 @@ export default {
 #select-perpage {
   display: flex;
   justify-content: space-between;
+}
+img {
+  height: 90px;
+  width: 90px;
 }
 </style>

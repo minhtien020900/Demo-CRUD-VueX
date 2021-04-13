@@ -11,7 +11,7 @@
         <slot name="modal-title"></slot>
       </template>
 
-      <b-form>
+      <b-form method="post">
         <b-form-group
           label="Category name:"
           label-for="input-name-category"
@@ -19,13 +19,13 @@
         >
           <b-form-input
             id="input-name-category"
-            v-model="catItem.category_name"
+            v-model="catItem.name"
           ></b-form-input>
         </b-form-group>
         <b-form-group label="Category image:" label-for="btn-select-file">
           <b-form-file
             id="btn-select-file"
-            v-model="catItem.catFile"
+            v-model="catFile"
             class="mt-3"
             plain
           ></b-form-file>
@@ -38,6 +38,9 @@
         </div>
       </b-form>
     </b-modal>
+    {{ editedItem }}
+    <br />
+    {{ catItem }}
   </div>
 </template>
 
@@ -48,7 +51,8 @@ export default {
 
   data() {
     return {
-      catItem: { id: 0, category_name: "", catFile: [] },
+      catItem: {},
+      catFile: [],
     };
   },
   watch: {
@@ -61,15 +65,15 @@ export default {
       alert(1);
     },
     save() {
-      if (
-        this.catItem.category_name.length > 0 &&
-        this.catItem.catFile.name != undefined
-      ) {
-        this.$emit("save", this.catItem);
+      if (this.catItem.name.length > 0 && this.catFile != undefined) {
+        let formData = new FormData();
+        formData.append("name", this.catItem.name);
+        formData.append("image", this.catFile);
+        this.$emit("save", formData);
       }
     },
     toggleModal() {
-      this.catItem = { id: 0, category_name: "", catFile: [] };
+      this.catItem = {};
     },
   },
   mounted() {

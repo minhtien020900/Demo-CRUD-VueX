@@ -44,7 +44,6 @@ export default {
           }
         })
         .catch((err) => {
-          // An error occurred
           console.log(err);
         });
     },
