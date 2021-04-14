@@ -28,8 +28,10 @@
       >
         <br />
         <template #cell(catFile)="data">
-          <img
-            class="img-fluid"
+          <b-img
+          thumbnail
+            rounded
+            center
             :src="`http://localhost:8000/${data.item.image}`"
           />
         </template>
@@ -253,7 +255,7 @@
     justify-content: space-between;
   }
   img {
-    height: 90px;
-    width: 90px;
+  width: 40%;
+  height: 40%;
   }
 </style>

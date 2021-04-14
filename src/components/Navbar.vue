@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-nav pills>
+    <b-nav >
       <b-nav-item>
         <router-link :to="{ name: 'Products' }">Products</router-link>
       </b-nav-item>

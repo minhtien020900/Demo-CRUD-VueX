@@ -25,7 +25,7 @@
         <b-form-group label="Category image:" label-for="btn-select-file">
           <b-form-file
             id="btn-select-file"
-            v-model="catFile"
+            v-model="catItem.image"
             class="mt-3"
             plain
           ></b-form-file>
@@ -38,53 +38,47 @@
         </div>
       </b-form>
     </b-modal>
-    {{ editedItem }}
     <br />
-    {{ catItem }}
   </div>
 </template>
 
 <script>
-  export default {
-    name: "category-modal",
-    props: ["editedItem"],
+export default {
+  name: "category-modal",
+  props: ["editedItem"],
 
-    data() {
-      return {
-        catItem: {},
-        catFile: [],
-      };
+  data() {
+    return {
+      catItem: {},
+    };
+  },
+  watch: {
+    editedItem: function () {
+      return (this.catItem = Object.assign({}, this.editedItem));
     },
-    watch: {
-      editedItem: function () {
-        return (this.catItem = Object.assign({}, this.editedItem));
-      },
+  },
+  methods: {
+    save() {
+      if (this.catItem.name.length > 0 && this.catItem.image != undefined) {
+        let formData = new FormData();
+        formData.append("name", this.catItem.name);
+        formData.append("image", this.catItem.image);
+        this.$emit("save", formData);
+      }
     },
-    methods: {
-      submitForm() {
-        alert(1);
-      },
-      save() {
-        if (this.catItem.name.length > 0 && this.catFile != undefined) {
-          let formData = new FormData();
-          formData.append("name", this.catItem.name);
-          formData.append("image", this.catFile);
-          this.$emit("save", formData);
-        }
-      },
-      toggleModal() {
-        this.catItem = {};
-      },
+    toggleModal() {
+      this.catItem = {};
     },
-    mounted() {
-      this.toggleModal();
-    },
-  };
+  },
+  mounted() {
+    this.toggleModal();
+  },
+};
 </script>
 
 <style>
-  #btn-form {
-    display: flex;
-    justify-content: center;
-  }
+#btn-form {
+  display: flex;
+  justify-content: center;
+}
 </style>
